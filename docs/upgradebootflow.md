@@ -48,5 +48,6 @@ Wi-Fi, root password and SSH settings for the install (see the README). `homekit
 * wyrecam kernel (with initramfs) boots and executes upgrade.sh
 * upgrade.sh backs up the wyrecam image (to backup-N.bin; backup.bin is never overwritten)
 * upgrade.sh flashes the nor flash with the factory wyze image backed up during the first install of wyrecam (copy backup.bin to nor_full.bin on the card first)
+* upgrade.sh sees the image has no WyreCam squashfs at 0x350000, so it skips all WyreCam configuration (the stock partition layout differs; WyreCam's rootfs_data would overlap the stock aback/cfg/para partitions)
 
 

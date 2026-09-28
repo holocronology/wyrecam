@@ -107,11 +107,12 @@ The installer copies the camera's original flash to `spi_backups/backup.bin` bef
 
 To go back to the stock firmware:
 
-1. Copy your original `backup.bin` to the top level of a WyreCam SD card and rename it `nor_full.bin`.
-2. Make sure `factory_t31_ZMC6tiIDQN` is present (not `.done`).
-3. Install as above.
+1. On a WyreCam SD card, copy (don't move) your original `spi_backups/backup.bin` to the top level of the card and name the copy `nor_full.bin`, replacing the WyreCam one.
+2. Make sure `factory_t31_ZMC6tiIDQN` is present. If it is named `factory_t31_ZMC6tiIDQN.done`, rename it back.
+3. Insert the card and power the camera on, as for an install. `wyrecam.conf` and `homekit/` are not needed; they are ignored when restoring.
+4. When the red LED blinks, unplug the camera and remove the card. The camera now boots the Wyze firmware with the settings it had before WyreCam was installed.
 
-The installer refuses to flash a file that isn't exactly the size of the flash (16 MB).
+The installer recognizes a WyreCam image by its layout. It flashes any other image exactly as it is and skips all WyreCam setup, so the stock firmware's own partitions are left untouched. It first backs up the current WyreCam flash to `backup-1.bin` (or the next free number), so `backup.bin` is never overwritten. It refuses to flash a file that isn't exactly the size of the flash (16 MB).
 
 ### Add WyreCam to HomeKit
 
