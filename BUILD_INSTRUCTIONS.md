@@ -9,5 +9,6 @@
  ```
  Copy the image to an SD card (know what you're doing)
  ```
- dd if=output/image/wyrecam_install.img of=/dev/<sdb> bs=512
+ dd if=output/images/wyrecam_install.img of=/dev/<sdb> bs=512
  ```
+ Then fill in `wyrecam.conf` on the card and create a HomeKit setup code with `scripts/homekit_setup_code.py` (see the README).

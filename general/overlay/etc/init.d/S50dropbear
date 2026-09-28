@@ -7,7 +7,15 @@
 test -r /etc/default/dropbear && . /etc/default/dropbear
 
 start() {
-	DROPBEAR_ARGS="$DROPBEAR_ARGS -R -B -k -p 22 -K 300"
+	# SSH is off unless the installer enabled it (ENABLE_SSH in wyrecam.conf).
+	# Keeping the switch here, rather than in the file's permissions, means a
+	# wiped settings partition leaves SSH off instead of turning it on.
+	if [ "$DROPBEAR_ENABLE" != "yes" ]; then
+		echo "dropbear sshd disabled (see /etc/default/dropbear)"
+		return 0
+	fi
+
+	DROPBEAR_ARGS="$DROPBEAR_ARGS -R -k -p 22 -K 300"
 
 	# If /etc/dropbear is a symlink to /var/run/dropbear, and
 	#   - the filesystem is RO (i.e. we can not rm the symlink),

@@ -1,14 +1,22 @@
 #!/bin/sh
+#
+# Runs upgrade.sh from the SD card, but only inside the installer kernel
+# (factory_t31_ZMC6tiIDQN, which boots with an initramfs). The installed
+# system never runs code from the SD card: otherwise anyone who could reach
+# the card slot could take over the camera.
 
 case "$1" in
   start)
+    if ! grep -qE '(^| )rdinit=|root=/dev/ram0' /proc/cmdline; then
+      exit 0
+    fi
     printf "Looking for upgrade.sh on mmc card:\n"
     if [[ `cat /sys/class/mmc_host/mmc0/device/present` = "Y" ]]; then
 	    printf "Found device present, waiting for mount\n"
 	    sleep 10
       if [[ -f /mnt/mmcblk0p1/upgrade.sh ]]; then
           echo "upgrade.sh found"
-         /mnt/mmcblk0p1/upgrade.sh 2>&1 | tee /mnt/mmcblk0p1/upgrade.out
+         sh /mnt/mmcblk0p1/upgrade.sh 2>&1 | tee /mnt/mmcblk0p1/upgrade.out
       else
           echo "Not found."
       fi
