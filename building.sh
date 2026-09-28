@@ -230,6 +230,7 @@ guestfish -a output/images/wyrecam_install.img <<_EOF_
     copy-in factory_t31_ZMC6tiIDQN /
     copy-in output/images/nor_full.bin /
     copy-in output/images/upgrade.sh /
+    copy-in scripts/wyrecam.conf /
     umount /
     #mount /dev/sda2 /
     #tar-in install/rootfs.tar.gz / compress:gzip

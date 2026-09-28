@@ -22,3 +22,8 @@ echo 'Note: BR2_TOOLCHAIN_BUILDROOT_LIBC="uclibc"'
 #fi
 
 rm -f ${TARGET_DIR}/usr/bin/gdbserver
+
+# Lock root in the read-only image. The installer sets a root password in the
+# settings overlay only if you ask for one, so wiping the overlay must not
+# leave an empty (passwordless) root account behind.
+sed -i 's|^root:[^:]*:|root:*:|' ${TARGET_DIR}/etc/shadow

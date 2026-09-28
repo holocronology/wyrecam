@@ -15,20 +15,15 @@ my_mount()
 {
     mkdir -p "${destdir}/$1" || exit 1
 
-    if ! mount -t auto -o sync "/dev/$1" "${destdir}/$1"; then
+    # noexec/nosuid/nodev: nothing on a removable card may run on the camera.
+    if ! mount -t auto -o sync,noexec,nosuid,nodev "/dev/$1" "${destdir}/$1"; then
         # failed to mount, clean up mountpoint
         rmdir "${destdir}/$1"
         exit 1
     fi
 
-    # copy files from autoconfig folder
-    [ -d "${destdir}/$1/autoconfig" ] && cp -afv ${destdir}/$1/autoconfig/* / | logger -s -p daemon.info -t autoconfig
-
-    # execution of the specified commands one time
-    [ -f "${destdir}/$1/autoconfig.sh" ] && (sh ${destdir}/$1/autoconfig.sh ; rm -f ${destdir}/$1/autoconfig.sh) | logger -s -p daemon.info -t autoconfig
-
-    # execution of the specified commands
-    [ -f "${destdir}/$1/autostart.sh" ] && sh ${destdir}/$1/autostart.sh | logger -s -p daemon.info -t autostart
+    # OpenIPC's autoconfig/, autoconfig.sh and autostart.sh hooks were removed:
+    # they ran whatever was on an inserted card as root.
 }
 
 case "${ACTION}" in
